@@ -1,63 +1,44 @@
-class MyCircularQueue {
-    private int[] queue;
-    private int front;
-    private int rear;
-    private int size;
-    private int capacity;
+import java.util.Stack;
 
-    public MyCircularQueue(int k) {
-        capacity = k;
-        queue = new int[k];
+interface QueueOperations {
+    void push(int x);
+    int pop();
+    int peek();
+    boolean empty();
+}
 
-        front = 0;
-        rear = -1;
-        size = 0;
+class MyQueue implements QueueOperations {
+    private Stack<Integer> input;
+    private Stack<Integer> output;
+
+    public MyQueue() {
+        input = new Stack<>();
+        output = new Stack<>();
     }
 
-    public boolean enQueue(int value) {
-        if (isFull()) {
-            return false;
+    public void push(int x) {
+        input.push(x);
+    }
+
+    public int pop() {
+        moveElements();
+        return output.pop();
+    }
+
+    public int peek() {
+        moveElements();
+        return output.peek();
+    }
+
+    public boolean empty() {
+        return input.isEmpty() && output.isEmpty();
+    }
+
+    private void moveElements() {
+        if (output.isEmpty()) {
+            while (!input.isEmpty()) {
+                output.push(input.pop());
+            }
         }
-
-        rear = (rear + 1) % capacity;
-        queue[rear] = value;
-        size++;
-
-        return true;
-    }
-
-    public boolean deQueue() {
-        if (isEmpty()) {
-            return false;
-        }
-
-        front = (front + 1) % capacity;
-        size--;
-
-        return true;
-    }
-
-    public int Front() {
-        if (isEmpty()) {
-            return -1;
-        }
-
-        return queue[front];
-    }
-
-    public int Rear() {
-        if (isEmpty()) {
-            return -1;
-        }
-
-        return queue[rear];
-    }
-
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
-    public boolean isFull() {
-        return size == capacity;
     }
 }
